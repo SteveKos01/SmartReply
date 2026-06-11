@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,7 +87,7 @@
     textarea {
       width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm);
       padding: 9px 11px; font-family: inherit; font-size: 12.5px; line-height: 1.55;
-      color: var(--text-primary); resize: vertical; min-height: 80px;
+      color: var(--text-primary); resize: vertical;
       background: var(--white); transition: border-color 0.15s; outline: none;
     }
     textarea:focus { border-color: var(--navy-light); }
@@ -101,22 +102,23 @@
     .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-secondary { background: var(--white); border: 1px solid var(--border); color: var(--text-primary); }
     .btn-secondary:hover { border-color: var(--navy-light); }
-    .btn-copy { background: var(--off-white); border: 1px solid var(--border); color: var(--text-secondary); font-size: 11px; padding: 5px 10px; border-radius: var(--radius-sm); }
-    .btn-copy:hover { background: #E8EDF5; }
-    .btn-copy.copied { color: var(--success); border-color: var(--success); }
+    .btn-send {
+      background: linear-gradient(135deg, #00B37D, #007A55);
+      color: var(--white); width: 100%;
+    }
+    .btn-send:hover { opacity: 0.9; }
+    .btn-send:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-icon { background: var(--off-white); border: 1px solid var(--border); color: var(--text-secondary); font-size: 11px; padding: 5px 10px; border-radius: var(--radius-sm); }
+    .btn-icon:hover { background: #E8EDF5; }
+    .btn-icon.active-state { color: var(--success); border-color: var(--success); }
     .btn-row { display: flex; gap: 8px; margin-top: 10px; }
     .btn-row .btn { flex: 1; }
     .spinner-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px 16px; gap: 10px; }
     .spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--navy-light); border-radius: 50%; animation: spin 0.7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .spinner-label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
-    .draft-actions { display: flex; justify-content: flex-end; margin-bottom: 6px; }
-    .draft-text {
-      background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-sm);
-      padding: 11px 13px; font-size: 12.5px; line-height: 1.65; color: var(--text-primary);
-      white-space: pre-wrap; max-height: 280px; overflow-y: auto;
-    }
     .error-card { background: #FFF2F2; border: 1px solid #FFCDD2; border-radius: var(--radius-sm); padding: 10px 12px; font-size: 12px; color: #C0392B; margin-bottom: 12px; }
+    .success-card { background: #F0FBF7; border: 1px solid #A8E6CF; border-radius: var(--radius-sm); padding: 10px 12px; font-size: 12px; color: #007A55; margin-bottom: 12px; display: none; }
     .section-title { font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 7px; }
     .divider { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
     .config-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
@@ -131,6 +133,31 @@
     .idle-card { text-align: center; padding: 20px; }
     .idle-icon { font-size: 24px; margin-bottom: 8px; }
     .idle-text { font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px; }
+
+    /* Draft editor */
+    .draft-toolbar {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
+    }
+    .draft-toolbar-left { display: flex; gap: 6px; }
+    .draft-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); align-self: center; }
+    .draft-editor {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 11px 13px;
+      font-family: inherit;
+      font-size: 12.5px;
+      line-height: 1.65;
+      color: var(--text-primary);
+      background: var(--white);
+      resize: vertical;
+      min-height: 200px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .draft-editor:focus { border-color: var(--navy-light); }
+    .char-count { font-size: 10px; color: #A8B5C5; text-align: right; margin-top: 4px; }
+    .send-note { font-size: 10.5px; color: var(--text-secondary); text-align: center; margin-top: 6px; line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -192,7 +219,7 @@
   </div>
   <hr class="divider">
   <div class="section-title">Your notes <span style="font-weight:400;text-transform:none;font-size:10px;color:#A8B5C5">(optional)</span></div>
-  <textarea id="user-thinking" placeholder="e.g. Loop in plant manager before committing to a timeline. Don't mention ERP issue yet."></textarea>
+  <textarea id="user-thinking" placeholder="e.g. Loop in plant manager before committing to a timeline. Don't mention ERP issue yet." style="min-height:80px"></textarea>
   <div class="btn-row">
     <button class="btn btn-secondary" onclick="goToPane(1)">← Back</button>
     <button class="btn btn-primary" onclick="draftReply()">Generate draft →</button>
@@ -206,15 +233,22 @@
     <div class="spinner-label">Writing your reply…</div>
   </div>
   <div id="draft-error" class="error-card" style="display:none"></div>
+  <div id="send-success" class="success-card">✓ Reply window opened — review and hit Send in Outlook.</div>
   <div id="draft-content" style="display:none">
-    <div class="draft-actions">
-      <button class="btn btn-copy" id="copy-btn" onclick="copyDraft()">Copy to clipboard</button>
+    <div class="draft-toolbar">
+      <div class="draft-label">Edit your draft</div>
+      <div class="draft-toolbar-left">
+        <button class="btn btn-icon" id="copy-btn" onclick="copyDraft()">Copy</button>
+        <button class="btn btn-icon" onclick="redraftReply()">↺ Regenerate</button>
+      </div>
     </div>
-    <div class="draft-text" id="draft-output"></div>
+    <textarea class="draft-editor" id="draft-editor" oninput="updateCharCount()"></textarea>
+    <div class="char-count"><span id="char-count">0</span> characters</div>
     <div class="btn-row" style="margin-top:10px">
       <button class="btn btn-secondary" onclick="goToPane(2)">← Revise</button>
-      <button class="btn btn-primary" onclick="redraftReply()">↺ Regenerate</button>
+      <button class="btn btn-send" onclick="sendReply()">Send reply ↗</button>
     </div>
+    <div class="send-note">Opens a pre-filled reply in Outlook for final review before sending.</div>
   </div>
 </div>
 
@@ -248,7 +282,6 @@
   var currentSummary = null;
   var selectedTone = null;
 
-  // Tab navigation
   function goToPane(n) {
     for (var i = 1; i <= 4; i++) {
       var pane = document.getElementById('pane-' + i);
@@ -261,9 +294,9 @@
       }
     }
     if (n === 4) loadConfig();
+    if (n !== 3) document.getElementById('send-success').style.display = 'none';
   }
 
-  // Wire up all tabs
   for (var t = 1; t <= 4; t++) {
     (function(num) {
       var el = document.getElementById('tab-' + num);
@@ -271,7 +304,6 @@
     })(t);
   }
 
-  // Config
   function saveConfig() {
     localStorage.setItem('sr_apikey', document.getElementById('api-key-input').value.trim());
     localStorage.setItem('sr_name', document.getElementById('user-name-input').value.trim());
@@ -295,7 +327,6 @@
     };
   }
 
-  // Tone selection
   function selectTone(el) {
     var chips = document.querySelectorAll('.tone-chip');
     for (var i = 0; i < chips.length; i++) chips[i].classList.remove('selected');
@@ -303,7 +334,11 @@
     selectedTone = el.textContent.trim();
   }
 
-  // Get email from Outlook
+  function updateCharCount() {
+    var text = document.getElementById('draft-editor').value;
+    document.getElementById('char-count').textContent = text.length;
+  }
+
   function getEmailContent(callback) {
     if (typeof Office === 'undefined' || !Office.context || !Office.context.mailbox) {
       callback(null, {
@@ -325,7 +360,6 @@
     });
   }
 
-  // Step 1: Summarize
   function summarizeEmail() {
     var config = getConfig();
     if (!config.apiKey) {
@@ -341,7 +375,6 @@
 
     getEmailContent(function(err, email) {
       if (err) { showSummaryError('Could not read email: ' + err.message); return; }
-
       var prompt = 'You are an executive assistant helping a senior IT leader rapidly understand an email they were CC\'d on.\n\nEMAIL SUBJECT: ' + email.subject + '\nFROM: ' + email.from + '\nBODY:\n' + email.body + '\n\nRespond ONLY with a JSON object (no markdown, no extra text) in this exact format:\n{\n  "situation": "2-3 sentences: what happened or is happening, factual and concise",\n  "action": "1-2 sentences: what decision or action is needed, and by when if clear",\n  "stakeholders": "brief list of people/teams involved and their role in this situation"\n}';
 
       fetch('https://api.anthropic.com/v1/messages', {
@@ -352,18 +385,13 @@
           'anthropic-version': '2023-06-01',
           'anthropic-dangerous-direct-browser-access': 'true'
         },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-5',
-          max_tokens: 600,
-          messages: [{ role: 'user', content: prompt }]
-        })
+        body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 600, messages: [{ role: 'user', content: prompt }] })
       })
       .then(function(res) { return res.json(); })
       .then(function(data) {
         if (data.error) throw new Error(data.error.message);
         var text = data.content.map(function(b) { return b.text || ''; }).join('').trim();
-        var clean = text.replace(/```json|```/g, '').trim();
-        var parsed = JSON.parse(clean);
+        var parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
         currentSummary = { email: email, parsed: parsed };
         document.getElementById('summary-situation').textContent = parsed.situation;
         document.getElementById('summary-action').textContent = parsed.action;
@@ -382,7 +410,6 @@
     document.getElementById('summary-idle').style.display = 'block';
   }
 
-  // Step 3: Draft
   function draftReply() {
     if (!currentSummary) { goToPane(1); return; }
     goToPane(3);
@@ -391,6 +418,7 @@
     document.getElementById('draft-loading').style.display = 'flex';
     document.getElementById('draft-content').style.display = 'none';
     document.getElementById('draft-error').style.display = 'none';
+    document.getElementById('send-success').style.display = 'none';
 
     var email = currentSummary.email;
     var parsed = currentSummary.parsed;
@@ -408,17 +436,15 @@
         'anthropic-version': '2023-06-01',
         'anthropic-dangerous-direct-browser-access': 'true'
       },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-5',
-        max_tokens: 600,
-        messages: [{ role: 'user', content: prompt }]
-      })
+      body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 600, messages: [{ role: 'user', content: prompt }] })
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
       if (data.error) throw new Error(data.error.message);
       var draft = data.content.map(function(b) { return b.text || ''; }).join('').trim();
-      document.getElementById('draft-output').textContent = draft;
+      var editor = document.getElementById('draft-editor');
+      editor.value = draft;
+      updateCharCount();
       document.getElementById('draft-loading').style.display = 'none';
       document.getElementById('draft-content').style.display = 'block';
     })
@@ -435,13 +461,13 @@
   }
 
   function copyDraft() {
-    var text = document.getElementById('draft-output').textContent;
+    var text = document.getElementById('draft-editor').value;
     var btn = document.getElementById('copy-btn');
     try {
       navigator.clipboard.writeText(text).then(function() {
-        btn.textContent = '✓ Copied!';
-        btn.classList.add('copied');
-        setTimeout(function() { btn.textContent = 'Copy to clipboard'; btn.classList.remove('copied'); }, 2000);
+        btn.textContent = '✓ Copied';
+        btn.classList.add('active-state');
+        setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('active-state'); }, 2000);
       });
     } catch(e) {
       var ta = document.createElement('textarea');
@@ -450,13 +476,66 @@
       ta.select();
       document.execCommand('copy');
       document.body.removeChild(ta);
-      btn.textContent = '✓ Copied!';
-      btn.classList.add('copied');
-      setTimeout(function() { btn.textContent = 'Copy to clipboard'; btn.classList.remove('copied'); }, 2000);
+      btn.textContent = '✓ Copied';
+      btn.classList.add('active-state');
+      setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('active-state'); }, 2000);
     }
   }
 
-  // Initialize with Office.js
+  function sendReply() {
+    var draftText = document.getElementById('draft-editor').value.trim();
+    if (!draftText) return;
+
+    // Parse subject and body from draft
+    var lines = draftText.split('\n');
+    var subject = '';
+    var bodyLines = [];
+    var bodyStarted = false;
+
+    for (var i = 0; i < lines.length; i++) {
+      if (!bodyStarted && lines[i].toLowerCase().startsWith('subject:')) {
+        subject = lines[i].replace(/^subject:\s*/i, '').trim();
+      } else if (!bodyStarted && subject && lines[i].trim() === '') {
+        bodyStarted = true;
+      } else if (bodyStarted) {
+        bodyLines.push(lines[i]);
+      }
+    }
+
+    var body = bodyLines.join('\n').trim();
+    if (!body) { body = draftText; }
+
+    // Use Office API to open a reply compose window
+    if (typeof Office !== 'undefined' && Office.context && Office.context.mailbox) {
+      var item = Office.context.mailbox.item;
+
+      // displayReplyForm opens Outlook compose window pre-filled
+      if (item.displayReplyForm) {
+        item.displayReplyForm({
+          htmlBody: body.replace(/\n/g, '<br>'),
+          callback: function(result) {
+            if (result.status === Office.AsyncResultStatus.Succeeded) {
+              document.getElementById('send-success').style.display = 'block';
+            }
+          }
+        });
+      } else if (item.displayReplyAllForm) {
+        item.displayReplyAllForm(body.replace(/\n/g, '<br>'));
+        document.getElementById('send-success').style.display = 'block';
+      } else {
+        // Fallback: copy and instruct
+        copyDraft();
+        document.getElementById('draft-error').style.display = 'block';
+        document.getElementById('draft-error').textContent = 'Auto-open not supported in this Outlook version — draft copied to clipboard, paste into your reply.';
+      }
+    } else {
+      // Dev mode fallback
+      copyDraft();
+      document.getElementById('send-success').style.display = 'block';
+      document.getElementById('send-success').textContent = '✓ Dev mode: draft copied to clipboard.';
+    }
+  }
+
   if (typeof Office !== 'undefined') {
     Office.onReady(function() {
       summarizeEmail();
