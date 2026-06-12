@@ -46,7 +46,7 @@
     .tone-chip { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--white); font-size: 11px; font-weight: 500; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; }
     .tone-chip:hover { border-color: var(--navy-light); color: var(--navy-light); }
     .tone-chip.selected { background: var(--navy); border-color: var(--navy); color: var(--white); }
-    .tone-persist-note { font-size: 10px; color: #A8B5C5; margin-bottom: 10px; font-style: italic; }
+
 
     textarea { width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 11px; font-family: inherit; font-size: 12.5px; line-height: 1.55; color: var(--text-primary); resize: vertical; background: var(--white); transition: border-color 0.15s; outline: none; }
     textarea:focus { border-color: var(--navy-light); }
@@ -150,14 +150,13 @@
 <div class="pane" id="pane-2">
   <div class="section-title">Response tone</div>
   <div class="tone-row" id="tone-chips">
-    <div class="tone-chip" data-tone="Acknowledge &amp; investigate">Acknowledge &amp; investigate</div>
-    <div class="tone-chip" data-tone="Escalate urgency">Escalate urgency</div>
-    <div class="tone-chip" data-tone="Redirect responsibility">Redirect responsibility</div>
-    <div class="tone-chip" data-tone="Provide update">Provide update</div>
-    <div class="tone-chip" data-tone="Request info">Request info</div>
-    <div class="tone-chip" data-tone="Decline / push back">Decline / push back</div>
+    <div class="tone-chip" onclick="selectTone(this)">Acknowledge &amp; investigate</div>
+    <div class="tone-chip" onclick="selectTone(this)">Escalate urgency</div>
+    <div class="tone-chip" onclick="selectTone(this)">Redirect responsibility</div>
+    <div class="tone-chip" onclick="selectTone(this)">Provide update</div>
+    <div class="tone-chip" onclick="selectTone(this)">Request info</div>
+    <div class="tone-chip" onclick="selectTone(this)">Decline / push back</div>
   </div>
-  <div class="tone-persist-note" id="tone-persist-note">No tone selected — your last choice will be remembered.</div>
   <hr class="divider">
   <div class="section-title">Your notes <span style="font-weight:400;text-transform:none;font-size:10px;color:#A8B5C5">(optional)</span></div>
   <textarea id="user-thinking" placeholder="e.g. Loop in plant manager before committing to a timeline. Don't mention ERP issue yet." style="min-height:80px"></textarea>
@@ -230,38 +229,13 @@
 <script>
   var currentSummary = null;
 
-  // Tone — load persisted value on startup
-  var selectedTone = localStorage.getItem('sr_tone') || null;
-
-  function initToneChips() {
-    var chips = document.querySelectorAll('.tone-chip');
-    for (var i = 0; i < chips.length; i++) {
-      chips[i].addEventListener('click', function() { selectTone(this); });
-      if (selectedTone && chips[i].getAttribute('data-tone') === selectedTone) {
-        chips[i].classList.add('selected');
-      }
-    }
-    updateToneNote();
-  }
+  var selectedTone = null;
 
   function selectTone(el) {
     var chips = document.querySelectorAll('.tone-chip');
     for (var i = 0; i < chips.length; i++) chips[i].classList.remove('selected');
     el.classList.add('selected');
-    selectedTone = el.getAttribute('data-tone');
-    localStorage.setItem('sr_tone', selectedTone);
-    updateToneNote();
-  }
-
-  function updateToneNote() {
-    var note = document.getElementById('tone-persist-note');
-    if (selectedTone) {
-      note.textContent = 'Using: ' + selectedTone + ' — click another chip to change.';
-      note.style.color = '#2A5298';
-    } else {
-      note.textContent = 'No tone selected — your choice will be remembered next time.';
-      note.style.color = '#A8B5C5';
-    }
+    selectedTone = el.textContent.trim();
   }
 
   // Nav
@@ -477,29 +451,37 @@
     var item = Office.context.mailbox.item;
 
     try {
-      if (mode === 'reply' && item.displayReplyForm) {
+      if (mode === 'reply') {
         item.displayReplyForm({ htmlBody: htmlBody });
         showSuccess(successMessages.reply);
-      } else if (mode === 'replyall' && item.displayReplyAllForm) {
+      } else if (mode === 'replyall') {
         item.displayReplyAllForm({ htmlBody: htmlBody });
         showSuccess(successMessages.replyall);
-      } else if (mode === 'forward' && item.displayNewMessageForm) {
-        // Forward: open new compose with body pre-filled
-        item.displayNewMessageForm({ htmlBody: htmlBody });
+      } else if (mode === 'forward') {
+        // displayReplyForm with toRecipients as empty array opens compose with body but no To
+        Office.context.mailbox.displayNewMessageForm({
+          toRecipients: [],
+          subject: item.subject ? 'Fwd: ' + item.subject : 'Fwd: ',
+          htmlBody: htmlBody
+        });
         showSuccess(successMessages.forward);
-      } else if (mode === 'reply' && item.displayReplyAllForm) {
-        // Fallback
-        item.displayReplyAllForm({ htmlBody: htmlBody });
-        showSuccess(successMessages.reply);
-      } else {
-        // Last resort: copy
-        copyDraft();
-        showSuccess('Draft copied — paste into your reply in Outlook.');
       }
     } catch(e) {
-      copyDraft();
-      document.getElementById('draft-error').style.display = 'block';
-      document.getElementById('draft-error').textContent = 'Could not open compose window — draft copied to clipboard instead.';
+      // Fallback for older Outlook versions
+      try {
+        if (mode === 'forward') {
+          item.displayReplyForm({ htmlBody: htmlBody });
+          showSuccess('Forward opened as reply — clear the To field and add your recipient.');
+        } else {
+          copyDraft();
+          document.getElementById('draft-error').style.display = 'block';
+          document.getElementById('draft-error').textContent = 'Could not open compose window — draft copied to clipboard instead.';
+        }
+      } catch(e2) {
+        copyDraft();
+        document.getElementById('draft-error').style.display = 'block';
+        document.getElementById('draft-error').textContent = 'Could not open compose window — draft copied to clipboard instead.';
+      }
     }
   }
 
@@ -510,7 +492,6 @@
   }
 
   // Boot
-  initToneChips();
   if (typeof Office !== 'undefined') {
     Office.onReady(function() { summarizeEmail(); });
   }
