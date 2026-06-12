@@ -458,30 +458,45 @@
         item.displayReplyAllForm({ htmlBody: htmlBody });
         showSuccess(successMessages.replyall);
       } else if (mode === 'forward') {
-        // displayReplyForm with toRecipients as empty array opens compose with body but no To
-        Office.context.mailbox.displayNewMessageForm({
-          toRecipients: [],
-          subject: item.subject ? 'Fwd: ' + item.subject : 'Fwd: ',
-          htmlBody: htmlBody
-        });
-        showSuccess(successMessages.forward);
+        // item.forward() is the Mailbox 1.5+ compose API — opens compose, sets body, clears To
+        if (item.forward) {
+          item.forward({
+            toRecipients: [],
+            callback: function(asyncResult) {
+              if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
+                var forwardItem = asyncResult.value;
+                forwardItem.body.setAsync(htmlBody, { coercionType: 'html' }, function() {
+                  showSuccess(successMessages.forward);
+                });
+              } else {
+                forwardFallback(htmlBody, item);
+              }
+            }
+          });
+        } else {
+          forwardFallback(htmlBody, item);
+        }
       }
     } catch(e) {
-      // Fallback for older Outlook versions
-      try {
-        if (mode === 'forward') {
-          item.displayReplyForm({ htmlBody: htmlBody });
-          showSuccess('Forward opened as reply — clear the To field and add your recipient.');
-        } else {
-          copyDraft();
-          document.getElementById('draft-error').style.display = 'block';
-          document.getElementById('draft-error').textContent = 'Could not open compose window — draft copied to clipboard instead.';
-        }
-      } catch(e2) {
+      if (mode === 'forward') {
+        forwardFallback(htmlBody, item);
+      } else {
         copyDraft();
         document.getElementById('draft-error').style.display = 'block';
         document.getElementById('draft-error').textContent = 'Could not open compose window — draft copied to clipboard instead.';
       }
+    }
+  }
+
+  function forwardFallback(htmlBody, item) {
+    // Best effort fallback: open reply form, note to user to clear To field
+    try {
+      item.displayReplyForm({ htmlBody: htmlBody });
+      showSuccess('✓ Opened as reply — remove the To address and add your forward recipient.');
+    } catch(e) {
+      copyDraft();
+      document.getElementById('draft-error').style.display = 'block';
+      document.getElementById('draft-error').textContent = 'Forward not supported — draft copied to clipboard, paste into a new email.';
     }
   }
 
