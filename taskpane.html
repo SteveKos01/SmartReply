@@ -38,25 +38,16 @@
     .card-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
     .card-label .dot { width: 6px; height: 6px; border-radius: 50%; background: linear-gradient(135deg, #6C63FF, #00C9B1); }
     .card-body { font-size: 12.5px; line-height: 1.6; color: var(--text-primary); white-space: pre-wrap; }
-    .section-title { font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 7px; }
-    .divider { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
-
-    /* Tone chips */
-    .tone-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
-    .tone-chip { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--white); font-size: 11px; font-weight: 500; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; }
+    .tone-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .tone-chip { padding: 4px 11px; border-radius: 20px; border: 1px solid var(--border); background: var(--white); font-size: 11px; font-weight: 500; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; }
     .tone-chip:hover { border-color: var(--navy-light); color: var(--navy-light); }
     .tone-chip.selected { background: var(--navy); border-color: var(--navy); color: var(--white); }
-
-
     textarea { width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 11px; font-family: inherit; font-size: 12.5px; line-height: 1.55; color: var(--text-primary); resize: vertical; background: var(--white); transition: border-color 0.15s; outline: none; }
     textarea:focus { border-color: var(--navy-light); }
     textarea::placeholder { color: #A8B5C5; }
-
-    /* Buttons */
     .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; }
     .btn-primary { background: linear-gradient(135deg, var(--navy), var(--navy-light)); color: var(--white); width: 100%; }
     .btn-primary:hover { opacity: 0.9; }
-    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-secondary { background: var(--white); border: 1px solid var(--border); color: var(--text-primary); }
     .btn-secondary:hover { border-color: var(--navy-light); }
     .btn-icon { background: var(--off-white); border: 1px solid var(--border); color: var(--text-secondary); font-size: 11px; padding: 5px 10px; border-radius: var(--radius-sm); }
@@ -64,29 +55,28 @@
     .btn-icon.active-state { color: var(--success); border-color: var(--success); }
     .btn-row { display: flex; gap: 8px; margin-top: 10px; }
     .btn-row .btn { flex: 1; }
-
-    /* Send button group */
-    .send-group { margin-top: 10px; }
+    .send-group { margin-top: 12px; }
     .send-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 7px; }
     .send-btn-row { display: flex; gap: 7px; }
-    .btn-send-reply { background: linear-gradient(135deg, #00B37D, #007A55); color: var(--white); flex: 1; font-size: 11.5px; padding: 9px 8px; }
+    .btn-send-reply { background: linear-gradient(135deg, #00B37D, #007A55); color: var(--white); flex: 1; font-size: 11.5px; padding: 9px 8px; border: none; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
     .btn-send-reply:hover { opacity: 0.9; }
-    .btn-send-replyall { background: linear-gradient(135deg, #2A5298, #1A3A6B); color: var(--white); flex: 1; font-size: 11.5px; padding: 9px 8px; }
+    .btn-send-replyall { background: linear-gradient(135deg, #2A5298, #1A3A6B); color: var(--white); flex: 1; font-size: 11.5px; padding: 9px 8px; border: none; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
     .btn-send-replyall:hover { opacity: 0.9; }
-    .btn-send-forward { background: linear-gradient(135deg, #7B5EA7, #5B3F8A); color: var(--white); flex: 1; font-size: 11.5px; padding: 9px 8px; }
+    .btn-send-forward { background: linear-gradient(135deg, #7B5EA7, #5B3F8A); color: var(--white); flex: 1; font-size: 11.5px; padding: 9px 8px; border: none; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
     .btn-send-forward:hover { opacity: 0.9; }
     .send-note { font-size: 10px; color: var(--text-secondary); text-align: center; margin-top: 6px; line-height: 1.5; }
-
     .spinner-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px 16px; gap: 10px; }
     .spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--navy-light); border-radius: 50%; animation: spin 0.7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .spinner-label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
     .error-card { background: #FFF2F2; border: 1px solid #FFCDD2; border-radius: var(--radius-sm); padding: 10px 12px; font-size: 12px; color: #C0392B; margin-bottom: 12px; }
     .success-card { background: #F0FBF7; border: 1px solid #A8E6CF; border-radius: var(--radius-sm); padding: 10px 12px; font-size: 12px; color: #007A55; margin-bottom: 12px; display: none; }
+    .section-title { font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 7px; }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
     .draft-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
     .draft-toolbar-left { display: flex; gap: 6px; }
     .draft-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); align-self: center; }
-    .draft-editor { width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 11px 13px; font-family: inherit; font-size: 12.5px; line-height: 1.65; color: var(--text-primary); background: var(--white); resize: vertical; min-height: 200px; outline: none; transition: border-color 0.15s; }
+    .draft-editor { width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 11px 13px; font-family: inherit; font-size: 12.5px; line-height: 1.65; color: var(--text-primary); background: var(--white); resize: vertical; min-height: 180px; outline: none; transition: border-color 0.15s; }
     .draft-editor:focus { border-color: var(--navy-light); }
     .char-count { font-size: 10px; color: #A8B5C5; text-align: right; margin-top: 4px; }
     .config-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
@@ -148,8 +138,8 @@
 
 <!-- PANE 2 -->
 <div class="pane" id="pane-2">
-  <div class="section-title">Response tone</div>
-  <div class="tone-row" id="tone-chips">
+  <div class="section-title">How do you want to respond?</div>
+  <div class="tone-row">
     <div class="tone-chip" onclick="selectTone(this)">Acknowledge &amp; investigate</div>
     <div class="tone-chip" onclick="selectTone(this)">Escalate urgency</div>
     <div class="tone-chip" onclick="selectTone(this)">Redirect responsibility</div>
@@ -184,17 +174,15 @@
     </div>
     <textarea class="draft-editor" id="draft-editor" oninput="updateCharCount()"></textarea>
     <div class="char-count"><span id="char-count">0</span> characters</div>
-
     <div class="send-group">
       <div class="send-label">Send as</div>
       <div class="send-btn-row">
-        <button class="btn btn-send-reply" onclick="sendReply('reply')">↩ Reply</button>
-        <button class="btn btn-send-replyall" onclick="sendReply('replyall')">↩↩ Reply All</button>
-        <button class="btn btn-send-forward" onclick="sendReply('forward')">→ Forward</button>
+        <button class="btn-send-reply" onclick="sendReply('reply')">↩ Reply</button>
+        <button class="btn-send-replyall" onclick="sendReply('replyall')">↩↩ Reply All</button>
+        <button class="btn-send-forward" onclick="sendReply('forward')">→ Forward</button>
       </div>
       <div class="send-note">Opens the compose window in Outlook for final review before sending.</div>
     </div>
-
     <div class="btn-row" style="margin-top:10px">
       <button class="btn btn-secondary" onclick="goToPane(2)">← Revise</button>
     </div>
@@ -228,17 +216,8 @@
 
 <script>
   var currentSummary = null;
-
   var selectedTone = null;
 
-  function selectTone(el) {
-    var chips = document.querySelectorAll('.tone-chip');
-    for (var i = 0; i < chips.length; i++) chips[i].classList.remove('selected');
-    el.classList.add('selected');
-    selectedTone = el.textContent.trim();
-  }
-
-  // Nav
   function goToPane(n) {
     for (var i = 1; i <= 4; i++) {
       var pane = document.getElementById('pane-' + i);
@@ -261,7 +240,6 @@
     })(t);
   }
 
-  // Config
   function saveConfig() {
     localStorage.setItem('sr_apikey', document.getElementById('api-key-input').value.trim());
     localStorage.setItem('sr_name', document.getElementById('user-name-input').value.trim());
@@ -285,12 +263,17 @@
     };
   }
 
-  function updateCharCount() {
-    var text = document.getElementById('draft-editor').value;
-    document.getElementById('char-count').textContent = text.length;
+  function selectTone(el) {
+    var chips = document.querySelectorAll('.tone-chip');
+    for (var i = 0; i < chips.length; i++) chips[i].classList.remove('selected');
+    el.classList.add('selected');
+    selectedTone = el.textContent.trim();
   }
 
-  // Email
+  function updateCharCount() {
+    document.getElementById('char-count').textContent = document.getElementById('draft-editor').value.length;
+  }
+
   function getEmailContent(callback) {
     if (typeof Office === 'undefined' || !Office.context || !Office.context.mailbox) {
       callback(null, {
@@ -312,7 +295,6 @@
     });
   }
 
-  // Summarize
   function summarizeEmail() {
     var config = getConfig();
     if (!config.apiKey) {
@@ -329,7 +311,6 @@
     getEmailContent(function(err, email) {
       if (err) { showSummaryError('Could not read email: ' + err.message); return; }
       var prompt = 'You are an executive assistant helping a senior IT leader rapidly understand an email they were CC\'d on.\n\nEMAIL SUBJECT: ' + email.subject + '\nFROM: ' + email.from + '\nBODY:\n' + email.body + '\n\nRespond ONLY with a JSON object (no markdown, no extra text) in this exact format:\n{\n  "situation": "2-3 sentences: what happened or is happening, factual and concise",\n  "action": "1-2 sentences: what decision or action is needed, and by when if clear",\n  "stakeholders": "brief list of people/teams involved and their role in this situation"\n}';
-
       fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-api-key': config.apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
@@ -358,7 +339,6 @@
     document.getElementById('summary-idle').style.display = 'block';
   }
 
-  // Draft
   function draftReply() {
     if (!currentSummary) { goToPane(1); return; }
     goToPane(3);
@@ -374,7 +354,6 @@
     var toneInstruction = selectedTone ? 'The response approach should: ' + selectedTone + '.' : '';
     var thinkingInstruction = userThinking ? 'My specific guidance for this reply: ' + userThinking : '';
     var sigBlock = config.name ? '\n\nSign off with:\n' + config.name + (config.role ? '\n' + config.role : '') : '';
-
     var prompt = 'You are drafting a professional email reply for a senior executive in manufacturing IT.\n\nORIGINAL EMAIL SUBJECT: ' + email.subject + '\nFROM: ' + email.from + '\nSITUATION SUMMARY: ' + parsed.situation + '\nACTION NEEDED: ' + parsed.action + '\nSTAKEHOLDERS: ' + parsed.stakeholders + '\n\n' + toneInstruction + '\n' + thinkingInstruction + '\n\nWrite a professional, concise reply email. Rules:\n- Clear subject line starting with "Re:"\n- No fluff or filler phrases\n- Direct and action-oriented\n- 3-5 sentences in the body unless more detail is genuinely needed\n- No bullet points unless listing 3+ items\n- End with a clear next step or ask' + sigBlock + '\n\nOutput ONLY the email text. Start with "Subject:" then a blank line, then the body.';
 
     fetch('https://api.anthropic.com/v1/messages', {
@@ -386,8 +365,7 @@
     .then(function(data) {
       if (data.error) throw new Error(data.error.message);
       var draft = data.content.map(function(b) { return b.text || ''; }).join('').trim();
-      var editor = document.getElementById('draft-editor');
-      editor.value = draft;
+      document.getElementById('draft-editor').value = draft;
       updateCharCount();
       document.getElementById('draft-loading').style.display = 'none';
       document.getElementById('draft-content').style.display = 'block';
@@ -420,11 +398,8 @@
     }
   }
 
-  // Send with mode: 'reply', 'replyall', 'forward'
-  function sendReply(mode) {
+  function parseDraftBody() {
     var draftText = document.getElementById('draft-editor').value.trim();
-    if (!draftText) return;
-
     var lines = draftText.split('\n');
     var bodyLines = [];
     var bodyStarted = false;
@@ -433,14 +408,18 @@
       else if (!bodyStarted && lines[i].trim() === '') { bodyStarted = true; }
       else if (bodyStarted) { bodyLines.push(lines[i]); }
     }
-    var body = bodyLines.join('\n').trim() || draftText;
-    var htmlBody = body.replace(/\n/g, '<br>');
+    return bodyLines.join('\n').trim() || draftText;
+  }
 
-    var successMessages = {
-      'reply': '✓ Reply window opened — review and hit Send in Outlook.',
-      'replyall': '✓ Reply All window opened — review recipients and hit Send.',
-      'forward': '✓ Forward window opened — add recipient(s) and hit Send.'
-    };
+  function showSuccess(msg) {
+    var el = document.getElementById('send-success');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function sendReply(mode) {
+    var body = parseDraftBody();
+    var htmlBody = body.replace(/\n/g, '<br>');
 
     if (typeof Office === 'undefined' || !Office.context || !Office.context.mailbox) {
       copyDraft();
@@ -450,63 +429,41 @@
 
     var item = Office.context.mailbox.item;
 
-    try {
-      if (mode === 'reply') {
-        item.displayReplyForm({ htmlBody: htmlBody });
-        showSuccess(successMessages.reply);
-      } else if (mode === 'replyall') {
-        item.displayReplyAllForm({ htmlBody: htmlBody });
-        showSuccess(successMessages.replyall);
-      } else if (mode === 'forward') {
-        // item.forward() is the Mailbox 1.5+ compose API — opens compose, sets body, clears To
-        if (item.forward) {
-          item.forward({
-            toRecipients: [],
-            callback: function(asyncResult) {
-              if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
-                var forwardItem = asyncResult.value;
-                forwardItem.body.setAsync(htmlBody, { coercionType: 'html' }, function() {
-                  showSuccess(successMessages.forward);
-                });
-              } else {
-                forwardFallback(htmlBody, item);
-              }
-            }
-          });
-        } else {
-          forwardFallback(htmlBody, item);
-        }
-      }
-    } catch(e) {
-      if (mode === 'forward') {
-        forwardFallback(htmlBody, item);
-      } else {
-        copyDraft();
-        document.getElementById('draft-error').style.display = 'block';
-        document.getElementById('draft-error').textContent = 'Could not open compose window — draft copied to clipboard instead.';
-      }
-    }
-  }
-
-  function forwardFallback(htmlBody, item) {
-    // Best effort fallback: open reply form, note to user to clear To field
-    try {
+    if (mode === 'reply') {
       item.displayReplyForm({ htmlBody: htmlBody });
-      showSuccess('✓ Opened as reply — remove the To address and add your forward recipient.');
-    } catch(e) {
-      copyDraft();
-      document.getElementById('draft-error').style.display = 'block';
-      document.getElementById('draft-error').textContent = 'Forward not supported — draft copied to clipboard, paste into a new email.';
+      showSuccess('✓ Reply window opened — review and hit Send in Outlook.');
+
+    } else if (mode === 'replyall') {
+      item.displayReplyAllForm({ htmlBody: htmlBody });
+      showSuccess('✓ Reply All window opened — review recipients and hit Send.');
+
+    } else if (mode === 'forward') {
+      // item.forward() opens a true forward compose window with body pre-filled and empty To
+      if (typeof item.forward === 'function') {
+        item.forward({
+          toRecipients: [],
+          callback: function(asyncResult) {
+            if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
+              asyncResult.value.body.setAsync(htmlBody, { coercionType: 'html' }, function() {
+                showSuccess('✓ Forward window opened — add recipient(s) and hit Send.');
+              });
+            } else {
+              showError('Forward failed: ' + asyncResult.error.message);
+            }
+          }
+        });
+      } else {
+        showError('Forward is not supported in this version of Outlook. Use Copy and paste into a new email.');
+        copyDraft();
+      }
     }
   }
 
-  function showSuccess(msg) {
-    var el = document.getElementById('send-success');
-    el.textContent = msg;
-    el.style.display = 'block';
+  function showError(msg) {
+    document.getElementById('draft-error').textContent = msg;
+    document.getElementById('draft-error').style.display = 'block';
   }
 
-  // Boot
   if (typeof Office !== 'undefined') {
     Office.onReady(function() { summarizeEmail(); });
   }
